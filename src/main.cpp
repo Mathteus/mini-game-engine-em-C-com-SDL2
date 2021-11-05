@@ -1,9 +1,7 @@
 #include "engine.hh"
 
 int main(int argc, char** argv){
-	Engine* engine = new Engine();
-	engine->running();
-	delete engine;
+	unique_ptr<Engine> engine(new Engine());
 	return 0;
 }
 

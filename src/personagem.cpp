@@ -1,6 +1,6 @@
 #include "personagem.hh"
 
-Personagem::Personagem(Sprites* sprite, string descr) : speed(5.0f) {
+Personagem::Personagem(Sprites* sprite, string descr) : speed(5.0f), is_colliding(true), r(false), l(false), u(false), d(false) {
 	this->animates.push_back(make_pair(sprite, descr));
 	this->atual = sprite;
 	swap_animate(descr);
@@ -19,7 +19,7 @@ void Personagem::add_animate(Sprites* sprite, string descr) {
 	this->atual = sprite;
 }
 
-void Personagem::position(double xpos, double ypos){
+void Personagem::position(int xpos, int ypos){
 	for(auto spr : animates){
         spr.first->posicao.x = xpos;
 		spr.first->posicao.y = ypos;
@@ -98,7 +98,44 @@ double Personagem::get_y(){
 	return this->atual->posicao.y;
 }
 
-bool Personagem::rigidiBody(double xpos, double ypos, int height, int width){
+bool Personagem::colisao_direita(int xpos, int ypos, int height, int width){
+	if((atual->posicao.x + atual->posicao.w) == xpos){
+		if(atual->posicao.y <= (ypos + height) && (atual->posicao.y + atual->posicao.h) >= ypos){
+			is_colliding = false;
+		}
+	}
+	return is_colliding;
+}
+
+bool Personagem::colisao_esquerda(int xpos, int ypos, int height, int width){
+	if(atual->posicao.x == (xpos + width)){
+		if(atual->posicao.y <= (ypos + height) && (atual->posicao.y + atual->posicao.h) >= ypos){
+			is_colliding = false;
+		}
+	}
+	return is_colliding;
+}
+
+bool Personagem::colisao_embaixo(int xpos, int ypos, int height, int width){
+	if((atual->posicao.y + atual->posicao.h) == ypos){
+		if(atual->posicao.x <= (xpos + width) && (atual->posicao.x + atual->posicao.w) >= xpos){
+			is_colliding = false;
+		}
+	}
+	return is_colliding;
+}
+
+bool Personagem::colisao_emcima(int xpos, int ypos, int height, int width){
+	if(atual->posicao.y == (ypos + height)){
+		if(atual->posicao.x <= (xpos + width) && (atual->posicao.x + atual->posicao.w) >= xpos){
+			is_colliding = false;
+		}
+	}
+	return is_colliding;
+}
+
+
+bool Personagem::rigidiBody(int xpos, int ypos, int height, int width){
 	bool retornado{false};
 	if(atual->posicao.y == (ypos + height)){
 		if(atual->posicao.x <= (xpos + width) && (atual->posicao.x + atual->posicao.w) >= xpos){
