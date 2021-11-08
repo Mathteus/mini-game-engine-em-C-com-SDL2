@@ -1,8 +1,8 @@
 #include "sprites.hh"
 
-Sprites::Sprites() : wpos(0), hpos(0), animw(0), animh(0), frameTime(0), is_animate(false), is_visible(true), flipe(false) {}
+Sprites::Sprites() : wpos(0), hpos(0), animw(0), animh(0), frameTime(0), is_animate(false), is_visible(true), is_flipped(false) {}
 
-Sprites::Sprites(const char* path, int xframes, int yframes, int width, int height) : wpos(0), hpos(0), animw(0), animh(0), frameTime(0), is_animate(false), is_visible(true), flipe(false) {
+Sprites::Sprites(const char* path, int xframes, int yframes, int width, int height) : wpos(0), hpos(0), animw(0), animh(0), frameTime(0), is_animate(false), is_visible(true), is_flipped(false) {
     imagem = IMG_Load(path);
     texturaImage = SDL_CreateTextureFromSurface(Systema::get_renderer(), imagem);
     SDL_QueryTexture(texturaImage, NULL, NULL, &wpos, &hpos);
@@ -10,6 +10,7 @@ Sprites::Sprites(const char* path, int xframes, int yframes, int width, int heig
     animacao.w = animw; animacao.h = animh;
     posicao.w = width; posicao.h = height;
     animacao.x = animacao.y = posicao.x = posicao.y = 0;
+    flip = SDL_FLIP_NONE;
 }
 
 Sprites::~Sprites(){
@@ -19,7 +20,10 @@ Sprites::~Sprites(){
 
 void Sprites::renderizar() {
     if (is_visible)
-        SDL_RenderCopy(Systema::get_renderer(), texturaImage, &animacao, &posicao);
+        SDL_RenderCopyEx(Systema::get_renderer(), texturaImage, &animacao, &posicao, angle, NULL, SDL_FLIP_NONE);
+    
+    if(is_flipped)
+        SDL_RenderCopyEx(Systema::get_renderer(), texturaImage, &animacao, &posicao, angle, NULL, SDL_FLIP_HORIZONTAL);
 }
 
 void Sprites::run_animate() {

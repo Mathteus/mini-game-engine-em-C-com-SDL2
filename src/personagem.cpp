@@ -1,8 +1,8 @@
 #include "personagem.hh"
 
-Personagem::Personagem(Sprites* sprite, string descr) : speed(5.0f), is_colliding(true), r(false), l(false), u(false), d(false) {
-	this->animates.push_back(make_pair(sprite, descr));
-	this->atual = sprite;
+Personagem::Personagem(const char* path, int xframes, int yframes, int width, int height, string descr) : speed(5.0f), is_colliding(true), r(false), l(false), u(false), d(false) {
+	this->atual = new Sprites(path, xframes, yframes, width, height);
+	this->animates.push_back(make_pair(atual, descr));
 	swap_animate(descr);
 }
 
@@ -14,9 +14,9 @@ Personagem::~Personagem(){
 		animates.pop_back();
 }
 
-void Personagem::add_animate(Sprites* sprite, string descr) {
-	this->animates.push_back(make_pair(sprite, descr));
-	this->atual = sprite;
+void Personagem::add_animate(const char* path, int xframes, int yframes, int width, int height, string descr) {
+	this->atual = new Sprites(path, xframes, yframes, width, height);
+	this->animates.push_back(make_pair(atual, descr));
 }
 
 void Personagem::position(int xpos, int ypos){
@@ -53,19 +53,19 @@ void Personagem::mover(int direction){
     for(auto spr : animates){
 		switch(direction){
 			case 1:
-				atual->posicao.x += speed;
+				spr.first->posicao.x += speed;
 				break;
 
 			case 2:
-				atual->posicao.x -= speed;
+				spr.first->posicao.x -= speed;
 				break;
 
 			case 3:
-				atual->posicao.y -= speed;
+				spr.first->posicao.y -= speed;
 				break;
 
 			case 4:
-				atual->posicao.y += speed;
+				spr.first->posicao.y += speed;
 				break;
 
 			default:
@@ -80,6 +80,14 @@ void Personagem::set_visible(bool visivel){
 
 void Personagem::set_animate(bool animar){
     this->atual->is_animate = animar;
+}
+
+void Personagem::set_flipped(bool flipped){
+	this->atual->is_flipped = flipped;
+}
+
+bool Personagem::get_flipped(){
+	return this->atual->is_flipped;
 }
 
 bool Personagem::get_visible(){

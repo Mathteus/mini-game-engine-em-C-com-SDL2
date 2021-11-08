@@ -14,15 +14,17 @@ class Personagem {
 		
 	public:
 		bool r, l, u, d;
-		Personagem(Sprites* sprite, string descr);
+		Personagem(const char* path, int xframes, int yframes, int width, int height, string descr);
 		//Personagem(Personagem&& old);
 		~Personagem();
-		void add_animate(Sprites* sprite, string descr);
+		void add_animate(const char* path, int xframes, int yframes, int width, int height, string descr);
 		void swap_animate(string descr);
 		void set_visible(bool visivel);
 		void set_animate(bool animar);
+		void set_flipped(bool flipped);
 		bool get_animate();
 		bool get_visible();
+		bool get_flipped();
 		void run_animate();
 		void renderizar();
 		void mover(int direction);

@@ -12,6 +12,7 @@ private:
 	int flags;
 	SDL_Window* janela;
 	static SDL_Renderer* renderer;
+	SDL_Rect mouse;
 
 public:
 	Systema(const char* titulo, int width, int height, bool fullscreen);

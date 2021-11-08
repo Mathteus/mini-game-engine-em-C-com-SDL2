@@ -5,7 +5,7 @@
 #include "personagem.hh"
 #include "sistema.hh"
 #include "sprites.hh"
-#include "background.hh"
+#include "mapa.hh"
 #include "audio.hh"
 #include "fonte.hh"
 #include <thread>
@@ -17,15 +17,13 @@ class Engine {
         Engine();
 
     private:
-        Systema* game;
-        Background* bg;
-        Sprites* sprite_one;
-        Personagem* player;
-        Fonte* fonte;
-        Fonte* avizos;
-        Audio* som;
-        Sprites* sprite_carro;
-        Personagem* carro;
+        unique_ptr<Systema> game;
+        unique_ptr<Mapa> tela1;
+        shared_ptr<Personagem> player;
+        unique_ptr<Fonte> fonte;
+        unique_ptr<Fonte> avizos;
+        unique_ptr<Audio> som;
+        shared_ptr<Personagem> carro;
 
     private:
         void inputs();
@@ -44,12 +42,10 @@ class Engine {
         direcoes diretion;
         string contador_fps, debuge;
         int frameCount, startTime;
-        SDL_Thread* p1;
-        SDL_Thread* p2;
         SDL_Event evento;
         bool side;
-        thread* t1;
-        thread* t2;
+        unique_ptr<thread> t1;
+        unique_ptr<thread> t2;
 };
 
 #endif // ENGINE_H
